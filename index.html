@@ -1,4 +1,11 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0B1210">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="VITALFIT">
 <title>VITALFIT Futebol</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap">
@@ -99,6 +106,7 @@ details.fq{border:1px solid var(--line);border-radius:var(--r2);padding:0 12px;b
 .gate .mark svg{width:56px;height:56px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .gate .wm{font:800 34px var(--fh);letter-spacing:.08em}.gate .wm span{color:var(--acc)}
 .load{width:160px;height:4px;border-radius:99px;background:var(--card2);overflow:hidden;margin-top:10px}.load i{display:block;height:100%;width:100%;background:var(--lime);border-radius:99px}
+.inst{display:flex;align-items:center;gap:12px;width:100%;max-width:360px;text-align:left;padding:12px 14px;border-radius:var(--r3);border:1px solid color-mix(in srgb,var(--acc) 45%,var(--line));background:var(--ok-bg);color:var(--ink)}.inst svg{flex:none;width:28px;height:28px;fill:none;stroke:var(--acc);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.inst b{display:block;font:700 15px var(--fh)}
 .lform{width:100%;max-width:360px;text-align:left;display:grid;gap:12px;margin-top:6px}
 @media (prefers-reduced-motion:no-preference){.gate.sp .mark{animation:pop .7s cubic-bezier(.2,.9,.3,1.3) both}.gate.sp .wm{animation:up .6s .25s both}.gate.sp .tg{animation:up .6s .45s both}.load i{animation:fill 1.7s .2s ease-out both}}
 @keyframes pop{from{transform:scale(.4);opacity:0}}@keyframes up{from{transform:translateY(12px);opacity:0}}@keyframes fill{from{transform:translateX(-100%)}}
@@ -107,6 +115,8 @@ ol.how{padding-left:22px;margin:4px 0 10px}.how li{margin:6px 0}
 @media (min-width:720px){h1{font-size:30px}.bar nav{max-width:560px}}
 @media (prefers-reduced-motion:no-preference){.btn,.chip{transition:background .15s}}
 </style>
+</head>
+<body>
 <div id="app"></div><div id="layer"></div><div id="toast" role="status" aria-live="polite" hidden></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -653,6 +663,7 @@ function vInicio(){
   const ult=t=>Math.max(0,...S.sessoes.filter(s=>s.treinoId===t.id).map(s=>diff(s.data,hj)*-1)),sug=cand.filter(c=>lim.includes(c.n)).sort((a,b)=>ult(a.t)-ult(b.t))[0];
   const cs=CATS.map(c=>[c,EX.filter(e=>e.cats.includes(c)).length]);
   return `<header class="top"><div><div class="brand">VITALFIT</div><h1>Preparação para o futebol</h1><p class="mut sm">Olá, ${esc(S.user.nome)}. Biblioteca, treinos e evolução.</p></div></header>
+  ${S.instOk?'':instBtn().replace('class="inst"','class="inst" style="max-width:none;margin-bottom:14px"')}
   <div role="search"><label class="f" for="gq">Buscar exercício ou treino</label><input id="gq" class="in" type="search" placeholder="Ex.: agachamento, glúteos, campo…" value="${esc(V.gq)}" autocomplete="off"><div id="gres" aria-live="polite"></div></div>
   ${S.aviso?`<div class="notice" style="margin-top:14px"><b>Antes de começar.</b> ${AVISO} <div class="row" style="margin-top:8px"><button class="btn s" data-a="okAviso">Entendi</button></div></div>`:''}
   <h2>Esta semana</h2>
@@ -812,8 +823,17 @@ function vCalorias(){const hj=hoje(),dd=S.cal.dias[hj]||{w:0,m:[]},k=kcalDe(hj),
   <h2>Últimos 7 dias</h2><div class="card">${bars(v,l,'calorias')}</div>
   <p class="xs mut" style="margin-top:10px">Estimativas informadas por você. Para um plano alimentar, consulte um nutricionista.</p>`}
 const MARK='<span class="mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12h4l2-6 4 13 3-9 2 4h5"/></svg></span>';
+const ISTD=()=>{try{return matchMedia('(display-mode: standalone)').matches||navigator.standalone===true}catch(e){return false}};
+const PLAT=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)?'ios':/android/i.test(navigator.userAgent)?'android':'pc';
+let instEv=null;addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEv=e});
+const instBtn=()=>ISTD()?'':`<button class="inst" data-a="instalar"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M12 7v8M8.5 11.5 12 15l3.5-3.5"/></svg><span class="grow"><b>Instalar o aplicativo</b><span class="sm mut">Abra o VITALFIT direto da tela inicial</span></span></button>`;
+function vInst(){const P={ios:['iPhone ou iPad',['Abra este app no Safari. Se estiver dentro do app Claude, use “Abrir no navegador”.','Toque em Compartilhar, o quadrado com a seta para cima.','Role a lista e toque em “Adicionar à Tela de Início”.','Toque em “Adicionar”.']],android:['Android',['Abra este app no Chrome.','Toque no menu ⋮, no canto superior direito.','Toque em “Instalar app” ou “Adicionar à tela inicial”.','Confirme em “Instalar” ou “Adicionar”.']],pc:['Computador',['Abra este app no Chrome ou no Edge.','Clique no ícone de instalar na barra de endereço ou abra o menu do navegador.','Escolha a opção de instalar a página ou criar atalho.','Confirme. O VITALFIT abre em uma janela própria.']]};
+  const ord=[PLAT].concat(['ios','android','pc'].filter(k=>k!==PLAT));
+  return `<div class="modal" role="dialog" aria-modal="true" aria-labelledby="it"><div class="card" style="max-height:88vh;overflow-y:auto"><h3 id="it">Instalar o aplicativo</h3><p class="sm mut">O atalho abre o VITALFIT direto da tela inicial, como um app.</p>
+  ${ord.map((k,n)=>`<details class="fq" ${n?'':'open'}><summary>${P[k][0]}${n?'':' · seu aparelho'}</summary><ol class="how sm">${P[k][1].map(s=>`<li>${s}</li>`).join('')}</ol></details>`).join('')}
+  <p class="xs mut">Precisa de internet para abrir. Seus dados continuam guardados no navegador onde você usa o app.</p><button class="btn p" data-a="instX" id="ix" style="width:100%">Entendi</button></div></div>`}
 function vSplash(){return `<div class="gate sp" data-a="skip" role="status" aria-label="Abrindo VITALFIT">${MARK}<div class="wm">VITAL<span>FIT</span></div><p class="mut tg" style="margin:0">Preparação física para o futebol</p><div class="load"><i></i></div></div>`}
-function vLogin(){return `<div class="gate">${MARK}<div class="wm" style="font-size:26px">VITAL<span>FIT</span></div><h1>Entrar</h1><p class="mut sm" style="max-width:340px;margin:0">Crie seu perfil neste aparelho para guardar treinos, sessões e calorias.</p>
+function vLogin(){return `<div class="gate">${MARK}<div class="wm" style="font-size:26px">VITAL<span>FIT</span></div>${instBtn()}<h1>Entrar</h1><p class="mut sm" style="max-width:340px;margin:0">Crie seu perfil neste aparelho para guardar treinos, sessões e calorias.</p>
   <form class="lform" id="lf" novalidate><div><label class="f" for="ln">Seu nome</label><input id="ln" class="in" autocomplete="name" maxlength="40" placeholder="Como quer ser chamado"></div>
   <div><label class="f" for="le">E-mail (opcional)</label><input id="le" class="in" type="email" autocomplete="email" maxlength="80" placeholder="voce@exemplo.com"></div>
   <p id="lerr" role="alert" class="sm" style="color:var(--bad);margin:0" hidden></p>
@@ -822,17 +842,18 @@ function vLogin(){return `<div class="gate">${MARK}<div class="wm" style="font-s
 /* ---------- render ---------- */
 function render(){
   if(ENG)ENG.kill();
-  if(V.splash||!S.user){$('#app').innerHTML=V.splash?vSplash():vLogin();$('#layer').innerHTML='';return}
+  if(V.splash||!S.user){$('#app').innerHTML=V.splash?vSplash():vLogin();$('#layer').innerHTML=V.inst?vInst():'';if(V.inst){const x=$('#ix');x&&x.focus()}return}
   const v={inicio:vInicio,biblioteca:vBib,treinos:vTreinos,plano:vPlano,manual:vManual,calorias:vCalorias,evolucao:vEvolucao,ajustes:vAjustes}[V.tab]();
   $('#app').innerHTML=v+`<div class="bar"><nav aria-label="Principal">${TABS.map(t=>`<button data-a="tab" data-v="${t[0]}" ${V.tab===t[0]||(t[0]==='treinosG'&&TG.includes(V.tab))?'aria-current="page"':''}><svg viewBox="0 0 24 24" aria-hidden="true">${t[2]}</svg>${t[1]}</button>`).join('')}</nav></div>`;
   let L='';
+  if(V.inst)L+=vInst();
   if(V.guia)L+=vGuia();
   if(V.det&&BYID[V.det])L+=vDetalhe(BYID[V.det]);
   if(V.addTo){const e=BYID[V.addTo];L+=`<div class="modal" role="dialog" aria-modal="true" aria-labelledby="mt"><div class="card"><h3 id="mt">Adicionar “${esc(e.nome)}”</h3><p class="sm mut">Escolha o treino.</p><div style="display:grid;gap:8px;margin:10px 0">${S.treinos.map(t=>`<button class="btn" data-a="addToT" data-id="${t.id}">${esc(t.nome||'Sem nome')}</button>`).join('')}<button class="btn p" data-a="newWith">Novo treino com este exercício</button></div><button class="btn g" data-a="fecharAdd">Cancelar</button></div></div>`}
   if(V.confirm)L+=`<div class="modal" role="alertdialog" aria-modal="true" aria-labelledby="ct"><div class="card"><h3 id="ct">${esc(V.confirm.t)}</h3><p class="sm mut">${esc(V.confirm.m)}</p><div class="row" style="margin-top:12px"><button class="btn d" data-a="okConf" id="cfok">Confirmar</button><button class="btn" data-a="noConf">Cancelar</button></div></div></div>`;
   $('#layer').innerHTML=L;
   const c=$('#cnt');if(c)c.textContent=filtrar().length+' de '+EX.length+' exercícios';
-  if(V.det||V.addTo||V.confirm||V.guia){const f=$('#cfok')||$('#layer [data-a="addToT"]')||$('#fx')||$('#gx');f&&f.focus()}
+  if(V.det||V.addTo||V.confirm||V.guia||V.inst){const f=$('#ix')||$('#cfok')||$('#layer [data-a="addToT"]')||$('#fx')||$('#gx');f&&f.focus()}
   if(ENG&&window.THREE)document.querySelectorAll('[data-m3d]').forEach(h=>{const e=BYID[h.dataset.m3d];if(e&&e.l&&ENG.PS[e.l]){try{const w=ENG.mk(e.l,e.pn||e.id);h.innerHTML='';h.append(w)}catch(x){console.warn('3D',x)}}});
   renderBusca();
 }
@@ -908,6 +929,8 @@ const A={
   gTimer(){const it=V.guia.itens[V.guia.i];if(gIv){gStop();$('#gtm').textContent=mmss(it.descanso);$('#gtl').textContent='descanso'}else gStart(it.descanso)},
   gSerie(){const it=V.guia.itens[V.guia.i];it.sets.push({reps:$('#gr').value.trim()||(parseInt(it.alvo)||''),carga:$('#gk').value.trim().replace(',','.')});$('#gsd').textContent=it.sets.length+'/'+it.series;if(it.sets.length>=it.series)toast('Séries concluídas. Avance para o próximo exercício.');gStart(it.descanso)},
   gNav(d){const G=V.guia,j=G.i+ +d.d;gStop();if(j<0)return;if(j>=G.itens.length){V.log={treinoId:G.treinoId,nome:G.nome,data:hoje(),dur:Math.max(1,Math.round((Date.now()-G.t0)/60000)),pse:6,obs:'',itens:G.itens.map(i=>({exId:i.exId,plan:i.series+' × '+i.alvo,sets:i.sets.length?i.sets:Array.from({length:i.series},()=>({reps:'',carga:''}))}))};logNivel();V.guia=null;V.tab='evolucao';render();scrollTo(0,0);toast('Confira o esforço e salve a sessão');return}G.i=j;render();const o=$('.overlay');o&&o.scrollTo(0,0)},
+  async instalar(){if(instEv){const e=instEv;instEv=null;try{e.prompt();const r=await e.userChoice;if(r&&r.outcome==='accepted'){S.instOk=true;salvar();toast('Aplicativo instalado');render();return}}catch(x){}}V.inst=true;render()},
+  instX(){V.inst=false;render()},
   skip(){if(V.splash){V.splash=false;render()}},
   visit(){S.user={nome:'Visitante',email:''};salvar();V.tab='inicio';render()},
   sair(){conf('Sair do perfil?','Seus treinos e registros continuam guardados neste aparelho.',()=>{S.user=null;salvar();V.tab='inicio'})},
@@ -922,9 +945,10 @@ const A={
   noConf(){V.confirm=null;render()}
 };
 document.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const f=A[b.dataset.a];if(f)f(b.dataset)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(V.confirm)A.noConf();else if(V.addTo)A.fecharAdd();else if(V.det)A.fechar()}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(V.inst)A.instX();else if(V.confirm)A.noConf();else if(V.addTo)A.fecharAdd();else if(V.det)A.fechar()}});
 document.addEventListener('submit',e=>{if(e.target.id!=='lf')return;e.preventDefault();const n=$('#ln').value.trim(),m=$('#le').value.trim(),er=$('#lerr');let msg='';if(n.length<2)msg='Informe seu nome com pelo menos 2 letras.';else if(m&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m))msg='Confira o e-mail ou deixe o campo vazio.';if(msg){er.textContent=msg;er.hidden=false;(n.length<2?$('#ln'):$('#le')).focus();return}S.user={nome:n,email:m};salvar();V.tab='inicio';render();toast('Bem-vindo, '+n)});
 V.splash=true;render();setTimeout(()=>{if(V.splash){V.splash=false;render()}},matchMedia('(prefers-reduced-motion:reduce)').matches?700:2100);
 </script>
 
-</body></html>
+</body>
+</html>
