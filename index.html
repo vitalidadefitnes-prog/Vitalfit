@@ -6,6 +6,9 @@
 <meta name="theme-color" content="#0B1210">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="VITALFIT">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>VITALFIT Futebol</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@600;700;800&display=swap">
@@ -950,5 +953,6 @@ document.addEventListener('submit',e=>{if(e.target.id!=='lf')return;e.preventDef
 V.splash=true;render();setTimeout(()=>{if(V.splash){V.splash=false;render()}},matchMedia('(prefers-reduced-motion:reduce)').matches?700:2100);
 </script>
 
+<script>if('serviceWorker' in navigator&&isSecureContext)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(e=>console.warn('sw',e)));</script>
 </body>
 </html>
