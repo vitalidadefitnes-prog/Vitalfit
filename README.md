@@ -3,7 +3,8 @@
 App de preparação física para futebol: biblioteca de exercícios com manequim 3D, treinos por posição, treino guiado, calorias e evolução.
 
 ## Arquivos
-- `index.html`: o app inteiro, num arquivo só (telas, dados, estilos e o manequim 3D).
+- `index.html`: o app inteiro (telas, dados, estilos e o manequim 3D).
+- `manifest.webmanifest`, `sw.js` e os ícones `icon-*.png`: permitem instalar o app no celular pelo GitHub Pages. Precisam ficar na mesma pasta do `index.html`.
 
 ## Como abrir
 Abra `index.html` no navegador. É preciso internet para carregar as fontes e a biblioteca 3D.
